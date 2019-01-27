@@ -24,7 +24,9 @@ dependencies:
   rxdart: any
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec
-
+dev_dependencies:
+  build_runner:
+  jaguar_serializer_cli:
 # The following section is specific to Flutter.
 flutter:
   # This section identifies this Flutter project as a plugin project.
