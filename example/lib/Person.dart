@@ -1,6 +1,5 @@
 import 'package:rhy_basis/rhy_basis.dart';
 
-import 'Person.dart';
 import 'entity/user.dart';
 import 'custom/MyNetWork.dart';
 enum _TaskEnum {
@@ -8,24 +7,18 @@ enum _TaskEnum {
   addOne, //if user click the fab,data will add one
 }
 
-class Home extends StatefulWidget {
+class Person extends StatefulWidget {
   @override
-  _HomeState createState() => _HomeState();
+  _PersonState createState() => _PersonState();
 }
 
-class _HomeState extends RhyBasisState<Home, _DataModel> {
+class _PersonState extends RhyBasisState<Person, _DataModel> {
   @override
   Widget buildNetWork(_DataModel t) {
 // TODO: implement buildNetWork
     return Scaffold(
       appBar: AppBar(
         title: Text('Rhyme Plugin example app'),
-        actions: <Widget>[
-          IconButton(icon: Icon(Icons.navigate_next), onPressed: (){
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: (BuildContext context)=>Person()));
-          })
-        ],
       ),
       body: Center(
         child: Text('You had click ${dataModel.data}'),
@@ -61,12 +54,8 @@ class _HomeState extends RhyBasisState<Home, _DataModel> {
     restartableFirst(_TaskEnum.addOne.index, (args) {
       dataModel.data++;
       //手动刷写ui
-      notify();
-    });
+      sendMessage('home', null);
 
-    registerMessage('home', (data){
-      dataModel.data++;
-      //手动刷写ui
       notify();
     });
   }

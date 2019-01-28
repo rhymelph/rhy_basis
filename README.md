@@ -265,3 +265,19 @@ class _DataModel {//todo 数据模型
 }
 
 ```
+
+5. 在两个页面进行通信
+```dart
+    //注册接收消息,home是用来标识你的消息，当发送的时候就要知道发给的是谁了
+    registerMessage('home', (data){
+          dataModel.data++;
+          //手动刷写ui
+          notify();
+        });
+
+    //发送消息
+    sendMessage('home', null);
+    
+    //注销注册
+    unRegisterMessage('home');
+```

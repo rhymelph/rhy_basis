@@ -20,14 +20,15 @@ class UserProvider extends RhyBasisProvider<UserBean,UserSerializer>{
   static const String columnAddress='address';
 
   @override
-  String get createTable => '''create table IF NO EXISTS $tableName(
+  String get createTable => '''create table if not exists $tableName(
   $columnId integer primary key autoincrement,
   $columnUsername text,
   $columnPassword text,
   $columnPhone text,
   $columnEmail text,
   $columnAddress text,
-  $columnAge integer)''';
+  $columnAge integer
+  )''';
 
   @override
   Serializer<UserBean> get serializer => UserSerializer();

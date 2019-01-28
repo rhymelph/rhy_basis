@@ -1,6 +1,5 @@
 part of 'rhy_basis.dart';
 
-
 enum WidgetStatus {
   NORMAL,
   EMPTY,
@@ -15,7 +14,28 @@ enum SnackBarDuration {
 
 ///基本的事件流
 class _RhyBasisEvent {
+  //任务表
   static final Map<String, ValueChanged<List<dynamic>>> _taskTable = {};
+
+  //已经注册了的消息表
+  static final Map<String, ValueChanged<dynamic>> _registerTable = {};
+}
+
+///发送消息
+void sendMessage(String to, dynamic data) {
+  if (_RhyBasisEvent._registerTable[to] != null) {
+    _RhyBasisEvent._registerTable[to](data);
+  }
+}
+
+///注册消息
+void registerMessage(String who, ValueChanged<dynamic> onCall) {
+  _RhyBasisEvent._registerTable[who] = onCall;
+}
+
+///移除消息
+void unRegisterMessage(String who) {
+  _RhyBasisEvent._registerTable.remove(who);
 }
 
 ///定义视图
@@ -165,6 +185,8 @@ abstract class RhyBasisState<T extends StatefulWidget, MD> extends State<T>
     }
   }
 
+
+
   /// 请求网络后构建
   Widget buildNetWork(MD t);
 
@@ -211,8 +233,8 @@ abstract class BasePresenter<T extends StatefulWidget, MD> implements State<T> {
     onCreateTask();
     _task = _taskController.stream.asBroadcastStream();
     _task.listen((task) {
-      ValueChanged<List<dynamic>> taskCall =
-          _RhyBasisEvent._taskTable['${this.runtimeType}_${task.restartableId}'];
+      ValueChanged<List<dynamic>> taskCall = _RhyBasisEvent
+          ._taskTable['${this.runtimeType}_${task.restartableId}'];
       if (taskCall != null) {
         taskCall(task.args);
       }
