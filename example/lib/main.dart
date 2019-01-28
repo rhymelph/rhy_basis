@@ -8,8 +8,6 @@ void main()async{
 
   baseConfig.initNetWork(MyNetWork());
 
-  baseConfig.db;
-
   runApp(MyApp());
 
 }

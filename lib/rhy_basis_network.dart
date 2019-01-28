@@ -1,11 +1,9 @@
 part of 'rhy_basis.dart';
 
-
 typedef void OnSuccess(dynamic data);
 typedef void OnError(dynamic error);
 
 abstract class RhyBasisNetWork {
-
   //base url
   String get baseUrl;
 
@@ -15,7 +13,7 @@ abstract class RhyBasisNetWork {
 
   Options get options => _dio.options;
 
-  Map<String,dynamic> _headers;
+  Map<String, dynamic> _headers;
 
   ResponseType _responseType;
 
@@ -33,48 +31,129 @@ abstract class RhyBasisNetWork {
         validateStatus: _validateStatus,
       ));
 
-  set setHeaders(Map<String,dynamic> headers){
-    this._headers=headers;
+  set setHeaders(Map<String, dynamic> headers) {
+    this._headers = headers;
   }
-  Map<String,dynamic> get getHeaders=>_headers;
 
-  set setResponseType(ResponseType type){
-    this._responseType=type;
+  Map<String, dynamic> get getHeaders => _headers;
+
+  set setResponseType(ResponseType type) {
+    this._responseType = type;
   }
-  ResponseType get getResponseType=>_responseType;
 
-  set setContentType(ContentType contentType){
-    this._contentType=contentType;
+  ResponseType get getResponseType => _responseType;
+
+  set setContentType(ContentType contentType) {
+    this._contentType = contentType;
   }
-  ContentType get getContentType=>_contentType;
 
-  void get<T>(String path,OnSuccess onSuccess,OnError onError,[data]) async {
-    try{
-      var response = await _dio.get<T>(path,data: data);
+  ContentType get getContentType => _contentType;
+
+  /// get请求,同步
+  ///
+  /// [path] 二级路径
+  /// [data] 请求内容
+  Future<T> getAsy<T>(String path, data) async {
+    var response = await _dio.get<T>(path, data: data);
+    return response.data;
+  }
+
+  /// get请求
+  ///
+  /// [path] 二级路径
+  /// [data] 请求内容
+  /// [onSuccess] 请求成功回调
+  /// [onError] 请求失败回调
+  void get<T>(String path, data, OnSuccess onSuccess, OnError onError) async {
+    try {
+      var response = await _dio.get<T>(path, data: data);
       dynamic result = response.data;
       onSuccess(result);
-    }on DioError catch(e){
-      if(e.response!=null){
+    } on DioError catch (e) {
+      if (e.response != null) {
         print(e.response.data);
         print(e.response.headers);
         print(e.response.request);
-      }else{
+      } else {
         print(e.type);
       }
     }
   }
 
-  Future<T> postJson<T>(String path, dynamic data) async {
+  /// post请求，内容为json，同步
+  ///
+  /// [path] 二级路径
+  /// [data] 请求内容
+  Future<T> postJsonAsy<T>(String path, data) async {
     var response = await _dio.post<T>(path, data: data);
     return response.data;
   }
 
-  Future<T> postForm<T>(String path, Map<String, dynamic> data) async {
+  /// post请求，内容为json
+  ///
+  /// [path] 二级路径
+  /// [data] 请求内容
+  /// [onSuccess] 请求成功回调
+  /// [onError] 请求失败回调
+  void postJson<T>(
+      String path, data, OnSuccess onSuccess, OnError onError) async {
+    try {
+      var response = await _dio.post<T>(path, data: data);
+      dynamic result = response.data;
+      onSuccess(result);
+    } on DioError catch (e) {
+      if (e.response != null) {
+        print(e.response.data);
+        print(e.response.headers);
+        print(e.response.request);
+      } else {
+        print(e.type);
+      }
+    }
+  }
+
+  /// post请求，内容为表单，同步
+  ///
+  /// [path] 二级路径
+  /// [data] 请求内容
+  Future<T> postFormAsy<T>(String path, Map<String, dynamic> data) async {
     FormData formData = FormData.from(data);
     var response = await _dio.post<T>(path, data: formData);
     return response.data;
   }
 
+  /// post请求，内容为表单
+  ///
+  /// [path] 二级路径
+  /// [data] 请求内容
+  /// [onSuccess] 请求成功回调
+  /// [onError] 请求失败回调
+  void postForm<T>(String path, Map<String, dynamic> data, OnSuccess onSuccess,
+      OnError onError) async {
+    try {
+      FormData formData = FormData.from(data);
+      var response = await _dio.post<T>(path, data: formData);
+      dynamic result = response.data;
+      onSuccess(result);
+    } on DioError catch (e) {
+      if (e.response != null) {
+        print(e.response.data);
+        print(e.response.headers);
+        print(e.response.request);
+      } else {
+        print(e.type);
+      }
+    }
+  }
+
+  /// 下载文件
+  ///
+  /// [path] 二级路径
+  /// [savePath] 保存路径
+  /// [onProgress] 下载进度
+  /// [cancelToken] 取消的token
+  /// [data] 请求的参数
+  /// [options] 请求配置
   Future<T> download<T>(
     String path,
     String savePath, [

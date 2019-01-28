@@ -1,7 +1,7 @@
 import 'package:rhy_basis/rhy_basis.dart';
 
 import 'entity/user.dart';
-
+import 'custom/MyNetWork.dart';
 enum _TaskEnum {
   loadData, //loading data
   addOne, //if user click the fab,data will add one
@@ -47,6 +47,9 @@ class _HomeState extends RhyBasisState<Home, _DataModel> {
     restartableFirst(_TaskEnum.loadData.index, (args) {
       //更新ui
       dataModel = _DataModel()..data = args[0];
+
+      baseConfig.getNetWork<MyNetWork>();
+
 
     });
 
