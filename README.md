@@ -153,7 +153,7 @@ void main()async{
   baseConfig.getNetWork<MyNetWork>();
 ```
 
-3. 绑定实体类：
+### 3. 绑定实体类：
     我们初始化数据库之后，可以继承`RhyBasisProvider`这个类，获取到该实体类进行数据库操作的工具类,如下
     
 ```dart
@@ -201,7 +201,7 @@ class UserProvider extends RhyBasisProvider<UserBean,UserSerializer>{
 class UserSerializer extends Serializer<UserBean> with _$UserSerializer {
 }
 ```
-4. 使用封装的RhyBasisState
+### 4. 使用封装的RhyBasisState
 
 ```dart
 enum _TaskEnum {//todo 任务标志
@@ -266,7 +266,7 @@ class _DataModel {//todo 数据模型
 
 ```
 
-5. 在两个页面进行通信
+### 5. 在两个页面进行通信
 ```dart
     //注册接收消息,home是用来标识你的消息，当发送的时候就要知道发给的是谁了
     registerMessage('home', (data){
