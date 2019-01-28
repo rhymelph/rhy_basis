@@ -25,10 +25,10 @@ class RhyBasisConfig {
   /// [onUpgrade] 数据库升级
   /// [onDowngrade] 数据库降级
   Future<void> initDataBase(String dbName,
-      int dbVersion, [
+      int dbVersion, {
         OnDatabaseVersionChangeFn onUpgrade,
         OnDatabaseVersionChangeFn onDowngrade,
-      ]) async{
+      }) async{
     this.dbName=dbName;
     this.dbVersion=dbVersion;
     Database db=await openDatabase(

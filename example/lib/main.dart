@@ -1,7 +1,18 @@
 import 'package:flutter/material.dart';
 import 'home.dart';
+import 'package:rhy_basis/rhy_basis.dart';
+import 'custom/MyNetWork.dart';
+void main()async{
+  await baseConfig.initDataBase('example.db', 1);
 
-void main() => runApp(MyApp());
+
+  baseConfig.initNetWork(MyNetWork());
+
+  baseConfig.db;
+
+  runApp(MyApp());
+
+}
 class MyApp extends StatefulWidget {
   @override
   _MyAppState createState() => _MyAppState();
