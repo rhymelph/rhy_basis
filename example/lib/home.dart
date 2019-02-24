@@ -13,7 +13,7 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
-class _HomeState extends RhyBasisState<Home, _DataModel> {
+class _HomeState extends RhyBasisStatefulWidget<Home, _DataModel> {
   @override
   Widget buildNetWork(_DataModel t) {
 // TODO: implement buildNetWork
@@ -28,7 +28,14 @@ class _HomeState extends RhyBasisState<Home, _DataModel> {
         ],
       ),
       body: Center(
-        child: Text('You had click ${dataModel.data}'),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Text('You had click '),
+            Text('${dataModel.data}',
+              style: TextStyle(fontSize: 28.0),),
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

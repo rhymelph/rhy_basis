@@ -39,8 +39,8 @@ void unRegisterMessage(String who) {
 }
 
 ///定义视图
-abstract class RhyBasisState<T extends StatefulWidget, MD> extends State<T>
-    with BasePresenter<T, MD> {
+abstract class RhyBasisStatefulWidget<T extends StatefulWidget, MD>
+    extends State<T> with BasePresenter<T, MD> {
   /// 获取到视图的key
   final GlobalKey<ScaffoldState> _mState = GlobalKey();
 
@@ -74,10 +74,11 @@ abstract class RhyBasisState<T extends StatefulWidget, MD> extends State<T>
   @override
   void initState() {
     super.initState();
+    _initStatePresenter();
     _baseStream = _baseStreamController.stream.asBroadcastStream();
     _baseValueListener = () {
       //监听值的改变并发送到视图
-      _baseStreamController.add(_valueNotifier.value);
+      if (mounted) _baseStreamController.add(_valueNotifier.value);
     };
     _valueNotifier.addListener(_baseValueListener);
   }
@@ -85,8 +86,11 @@ abstract class RhyBasisState<T extends StatefulWidget, MD> extends State<T>
   @override
   void dispose() {
     super.dispose();
-    _valueNotifier.removeListener(_baseValueListener);
-    _baseStreamController.close();
+    _disposePresenter();
+    if (_valueNotifier != null)
+      _valueNotifier.removeListener(_baseValueListener);
+
+    if (_baseStreamController != null) _baseStreamController.close();
   }
 
   /// 显示对话框
@@ -185,8 +189,6 @@ abstract class RhyBasisState<T extends StatefulWidget, MD> extends State<T>
     }
   }
 
-
-
   /// 请求网络后构建
   Widget buildNetWork(MD t);
 
@@ -216,7 +218,7 @@ abstract class RhyBasisState<T extends StatefulWidget, MD> extends State<T>
 }
 
 ///定义逻辑
-abstract class BasePresenter<T extends StatefulWidget, MD> implements State<T> {
+abstract class BasePresenter<T extends StatefulWidget, MD> {
   final StreamController<_Task> _taskController = StreamController<_Task>();
   Stream<_Task> _task;
   List<String> _taskTable = [];
@@ -228,25 +230,28 @@ abstract class BasePresenter<T extends StatefulWidget, MD> implements State<T> {
 
   MD get dataModel => _valueNotifier.value;
 
-  @override
-  void initState() {
+  bool get mounted;
+
+  void _initStatePresenter() {
     onCreateTask();
     _task = _taskController.stream.asBroadcastStream();
     _task.listen((task) {
-      ValueChanged<List<dynamic>> taskCall = _RhyBasisEvent
-          ._taskTable['${this.runtimeType}_${task.restartableId}'];
-      if (taskCall != null) {
-        taskCall(task.args);
+      if (mounted) {
+        ValueChanged<List<dynamic>> taskCall = _RhyBasisEvent
+            ._taskTable['${this.runtimeType}_${task.restartableId}'];
+        if (taskCall != null) {
+          taskCall(task.args);
+        }
       }
     });
     initData();
   }
 
-  @override
-  void dispose() {
-    _taskController.close();
+  void _disposePresenter() {
+    if (_taskController != null) _taskController.close();
     _RhyBasisEvent._taskTable.removeWhere((a, b) => _taskTable.contains(a));
-    _taskTable.clear();
+
+    if (_taskTable != null) _taskTable.clear();
   }
 
   /// 接收任务的方法

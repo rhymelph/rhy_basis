@@ -12,7 +12,7 @@ class Person extends StatefulWidget {
   _PersonState createState() => _PersonState();
 }
 
-class _PersonState extends RhyBasisState<Person, _DataModel> {
+class _PersonState extends RhyBasisStatefulWidget<Person, _DataModel> {
   @override
   Widget buildNetWork(_DataModel t) {
 // TODO: implement buildNetWork
@@ -21,7 +21,14 @@ class _PersonState extends RhyBasisState<Person, _DataModel> {
         title: Text('Rhyme Plugin example app'),
       ),
       body: Center(
-        child: Text('You had click ${dataModel.data}'),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Text('You had click '),
+            Text('${dataModel.data}',
+            style: TextStyle(fontSize: 28.0),),
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -38,6 +45,7 @@ class _PersonState extends RhyBasisState<Person, _DataModel> {
     start(_TaskEnum.loadData.index, [1]);
 
   }
+
 
   @override
   void onCreateTask() {

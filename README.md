@@ -214,7 +214,7 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
-class _HomeState extends RhyBasisState<Home, _DataModel> {
+class _HomeState extends RhyBasisStatefulWidget<Home, _DataModel> {
   @override
   Widget buildNetWork(_DataModel t) {//todo 用于请求成功后的部件构建
     return Scaffold(
